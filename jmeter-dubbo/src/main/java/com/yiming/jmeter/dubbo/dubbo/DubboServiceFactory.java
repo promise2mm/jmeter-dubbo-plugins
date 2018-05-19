@@ -65,16 +65,16 @@ public class DubboServiceFactory {
         GenericService genericService = cache.get(reference);
         // 用com.alibaba.dubbo.rpc.service.GenericService可以替代所有接口引用
         int len = parameters.size();
-        String[] invokeParamTyeps = new String[len];
+        String[] invokeParamTypes = new String[len];
         Object[] invokeParams = new Object[len];
         for (int i = 0; i < len; i++) {
-            invokeParamTyeps[i] = parameters.get(i).get("id").getClass().getName();
+            invokeParamTypes[i] = parameters.get(i).get("id").getClass().getName();
             invokeParams[i] = parameters.get(i).get("id");
         }
-        System.out.println(String.format("methodName:[%s],invokeParamTyeps:[%s],invokeParams:[%s]",
-                methodName, JSON.toJSONString(invokeParamTyeps), JSON.toJSONString(invokeParams)));
+        System.out.println(String.format("methodName:[%s],invokeParamTypes:[%s],invokeParams:[%s]",
+                methodName, JSON.toJSONString(invokeParamTypes), JSON.toJSONString(invokeParams)));
         try {
-            return genericService.$invoke(methodName, invokeParamTyeps, invokeParams);
+            return genericService.$invoke(methodName, invokeParamTypes, invokeParams);
         } catch (Exception e) {
             e.printStackTrace();
         }
