@@ -1,7 +1,16 @@
 package com.yiming.jmeter.dubbo;
 
+import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ProtocolConfig;
+import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
+import com.alibaba.dubbo.rpc.service.GenericService;
+import com.alibaba.fastjson.JSON;
+import com.yiming.jmeter.dubbo.dubbo.DubboServiceFactory;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yiming on 2018-05-10 11:01.
@@ -11,30 +20,46 @@ import com.alibaba.dubbo.config.RegistryConfig;
  */
 public class Test {
 
-    private String zkAddress;
+    private static final String zkAddress = "172.16.101.137:1500";
 
-    private String applicationName = "";
+    private static final String applicationName = "zcy-fixed-universal";
+
+    private static final String PROTOCOL = "zookeeper";
+    private static final String VERSION = "1.0.0";
+
 
 
     public static void main(String[] args) {
+
+        ApplicationConfig applicationConfig = new ApplicationConfig();
+        applicationConfig.setName(applicationName);
+
         // 连接注册中心配置
         registryConfig();
 
-        // 服务提供者协议配置
-        ProtocolConfig protocol = new ProtocolConfig();
-        protocol.setName("dubbo");
-        protocol.setPort(12345);
-        protocol.setThreads(200);
+        ReferenceConfig<GenericService> referenceConfig = new ReferenceConfig<>();
+        referenceConfig.setApplication(applicationConfig);
+        referenceConfig.setRegistry(registryConfig());
+        referenceConfig.setVersion(VERSION);
 
-//        DubboServiceFactory.getInstance().genericInvoke();
 
+        String interfaceName = "cn.gov.zcy.user.service.ZcyUserReadService";
+        String methodName = "findUserById";
+
+        referenceConfig.setInterface(interfaceName);
+        referenceConfig.setGeneric(Boolean.TRUE);
+        Object res = referenceConfig.get().$invoke(methodName,
+            new String[]{"java.lang.Long"},
+            new Long[]{100L}
+            );
+        System.out.println(JSON.toJSONString(res));
     }
 
-    private static void registryConfig() {
+    private static RegistryConfig registryConfig() {
         RegistryConfig registry = new RegistryConfig();
-        registry.setAddress("10.20.130.230:9090");
-        registry.setUsername("aaa");
-        registry.setPassword("bbb");
+        registry.setAddress(zkAddress);
+        registry.setProtocol(PROTOCOL);
+        return registry;
     }
 
 

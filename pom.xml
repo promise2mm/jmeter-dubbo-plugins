@@ -18,6 +18,7 @@
         <lombok.version>1.16.10</lombok.version>
         <fastjson.version>1.2.47</fastjson.version>
         <logback.version>1.2.3</logback.version>
+        <zkclient.version>0.10</zkclient.version>
     </properties>
     <dependencies>
         <dependency>
@@ -53,6 +54,12 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.101tec</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>${zkclient.version}</version>
         </dependency>
 
 
