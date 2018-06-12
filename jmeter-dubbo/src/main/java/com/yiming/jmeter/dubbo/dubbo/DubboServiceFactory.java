@@ -46,6 +46,10 @@ public class DubboServiceFactory {
 
     }
 
+    public RegistryConfig getRegistry() {
+        return registry;
+    }
+
     public static DubboServiceFactory getInstance() {
         return SingletonHolder.INSTANCE;
     }
